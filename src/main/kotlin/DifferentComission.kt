@@ -1,17 +1,53 @@
 package ru.netology
 
-const val PERCENTTRANSACTION: Double = 0.0075
-const val MINMONEYTRANSFER: UInt = 3500u
+const val MASTERCARD = "MasterCard"
+const val MAESTRO = "Maestro"
+const val VISA = "Visa"
+const val MIR = "МИР"
+const val VKPAY = "VKPay"
+
+val enterSumTransaction = 50_000_00
+
+fun choicePaymentSystem(): String {
+	print(
+		"Введите номер для выбора платёжной системы: \n" +
+				"1. MasterCard \n" +
+				"2. Maestro \n" +
+				"3. Visa \n" +
+				"4. Мир \n" +
+				"5. VKPay \n"
+	)
+	val choice = when (readln().toInt()) {
+		1 -> MASTERCARD
+		2 -> MAESTRO
+		3 -> VISA
+		4 -> MIR
+		else -> VKPAY
+	}
+	return choice
+}
+
+fun transferFeeMastercardMaestro(): Int {
+	return if (enterSumTransaction < 75_000_00) 0
+	else (((enterSumTransaction * 0.006) + 20_00) / 100).toInt()
+}
+
+fun transferFeeVisaMir(): Int {
+	return if ((enterSumTransaction * 0.0075).toInt() < 35_00) 35_00
+	else ((enterSumTransaction * 0.0075) / 100).toInt()
+}
+
+fun moneyTransferFee() {
+	val amountKop = when (choicePaymentSystem()) {
+		MASTERCARD -> transferFeeMastercardMaestro()
+		MAESTRO -> transferFeeMastercardMaestro()
+		VISA -> transferFeeVisaMir()
+		MIR -> transferFeeVisaMir()
+		else -> 0
+	}
+	return println("Комиссия за перевод $amountKop коп.")
+}
 
 fun main() {
-
-	print("Введите сумму перевода в рублях: ")
-
-	val transactionRub = (readln().toUInt() * 100u).toDouble()
-	val moneyTransferFee = (transactionRub * PERCENTTRANSACTION).toUInt()
-	val amountKop = if (moneyTransferFee > MINMONEYTRANSFER) moneyTransferFee else MINMONEYTRANSFER
-	val allPayment = (amountKop + transactionRub.toUInt()) / 100u
-
-	println("Ваша комиссия за перевод составит $amountKop коп.")
-	println("Сумма перевода, включая комиссию: $allPayment руб.")
+	moneyTransferFee()
 }
