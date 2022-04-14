@@ -32,7 +32,7 @@ fun timeToHour(): String =
 	else if (timeWithTwoThreeFour()) "$minutesToHours часа назад"
 	else "$minutesToHours часов назад"
 
-fun agoToText() {
+fun agoToText(): String {
 	val allTime = when (timeInSite) {
 		in 0..60 -> "Был(-а) на сайте только что"
 		in 61..3_600 -> "Был(-а) на сайте ${timeToMinute()}"
@@ -41,9 +41,9 @@ fun agoToText() {
 		in 172_801..259_200 -> "Был(-а) на сайте вчера"
 		else -> "Был(-а) на сайте давно"
 	}
-	println(allTime)
+	return allTime
 }
 
 fun main() {
-	return agoToText()
+	print(agoToText())
 }
